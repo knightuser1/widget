@@ -3,24 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Dashboard</title>
+<title>MyWidget — Your Personal Dashboard App</title>
+<meta name="description" content="Countdown timers, water tracker, habits, notes & daily inspiration. All in one beautiful app.">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0e0e11;
-    --surface: #16161a;
-    --surface2: #1e1e24;
+    --bg: #080810;
+    --surface: #12121a;
+    --surface2: #1a1a24;
     --border: rgba(255,255,255,0.07);
     --text: #f0ede8;
-    --muted: #7a7885;
-    --accent1: #e8c87a; /* gold */
-    --accent2: #7ab8e8; /* sky */
-    --accent3: #a8e87a; /* mint */
-    --accent4: #e87ab0; /* rose */
-    --radius: 20px;
+    --muted: #6a6878;
+    --accent1: #e8c87a;
+    --accent2: #7ab8e8;
+    --accent3: #a8e87a;
+    --accent4: #e87ab0;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
 
   body {
     background: var(--bg);
@@ -30,1043 +32,700 @@
     overflow-x: hidden;
   }
 
-  /* Grain overlay */
+  /* ── GRAIN ── */
   body::before {
     content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0.4;
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 9999; opacity: 0.35;
   }
 
-  .header {
-    padding: 32px 32px 0;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
+  /* ── GLOW BG ── */
+  .bg-glow {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 20%, rgba(122,184,232,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 30% at 80% 70%, rgba(232,200,122,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 60% 10%, rgba(232,122,176,0.05) 0%, transparent 60%);
   }
 
-  .header-left h1 {
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 18px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(8,8,16,0.7);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
     font-family: 'DM Serif Display', serif;
-    font-size: clamp(1.8rem, 4vw, 2.8rem);
-    font-weight: 400;
-    letter-spacing: -0.02em;
-    line-height: 1;
-  }
-
-  .header-left h1 span {
+    font-size: 1.3rem;
     font-style: italic;
     color: var(--accent1);
+    letter-spacing: -0.02em;
   }
 
-  .live-clock {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.85rem;
+  .nav-links { display: flex; align-items: center; gap: 8px; }
+
+  .nav-link {
     color: var(--muted);
-    letter-spacing: 0.05em;
-    text-align: right;
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 7px 14px;
+    border-radius: 999px;
+    transition: all 0.2s;
+    letter-spacing: 0.04em;
+  }
+  .nav-link:hover { color: var(--text); background: var(--surface2); }
+
+  .nav-cta {
+    background: var(--accent2);
+    color: #0a1a2e;
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 800;
+    padding: 8px 18px;
+    border-radius: 999px;
+    transition: all 0.2s;
+    letter-spacing: 0.04em;
+  }
+  .nav-cta:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative; z-index: 1;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 120px 24px 80px;
   }
 
-  .live-clock .time {
-    font-size: 1.5rem;
-    color: var(--text);
-    font-weight: 500;
-    display: block;
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(122,184,232,0.1);
+    border: 1px solid rgba(122,184,232,0.25);
+    border-radius: 999px;
+    padding: 6px 16px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    animation: fadeUp 0.6s ease both;
   }
 
-  /* Grid layout */
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    grid-template-rows: auto;
-    gap: 16px;
-    padding: 24px 32px 32px;
+  .hero-badge .pulse {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--accent3);
+    animation: pulse 2s ease-in-out infinite;
   }
 
-  /* Widget base */
-  .widget {
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.7); }
+  }
+
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(3rem, 10vw, 7rem);
+    font-weight: 400;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin-bottom: 24px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+
+  .hero h1 .italic { font-style: italic; color: var(--accent1); }
+  .hero h1 .sky { color: var(--accent2); }
+
+  .hero-sub {
+    font-size: clamp(0.95rem, 2vw, 1.15rem);
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.7;
+    margin-bottom: 40px;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+
+  .hero-btns {
+    display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
+    animation: fadeUp 0.6s 0.3s ease both;
+    margin-bottom: 60px;
+  }
+
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--accent2);
+    color: #0a1a2e;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 800;
+    padding: 15px 30px;
+    border-radius: 14px;
+    transition: all 0.25s;
+    letter-spacing: 0.02em;
+    border: none; cursor: pointer;
+  }
+  .btn-primary:hover { filter: brightness(1.1); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(122,184,232,0.3); }
+
+  .btn-secondary {
+    display: inline-flex; align-items: center; gap: 10px;
     background: var(--surface);
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 15px 30px;
+    border-radius: 14px;
     border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 24px;
+    transition: all 0.25s;
+    letter-spacing: 0.02em;
+  }
+  .btn-secondary:hover { border-color: rgba(255,255,255,0.18); transform: translateY(-2px); }
+
+  /* ── PHONE MOCKUP ── */
+  .phone-wrap {
+    animation: fadeUp 0.8s 0.4s ease both;
     position: relative;
+  }
+
+  .phone {
+    width: min(280px, 75vw);
+    height: auto;
+    background: var(--surface);
+    border-radius: 36px;
+    border: 2px solid rgba(255,255,255,0.1);
+    padding: 16px;
+    position: relative;
+    box-shadow:
+      0 0 0 1px rgba(0,0,0,0.5),
+      0 40px 80px rgba(0,0,0,0.6),
+      0 0 60px rgba(122,184,232,0.08);
     overflow: hidden;
-    animation: fadeUp 0.5s ease both;
   }
 
-  .widget::after {
+  .phone::before {
     content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 80px; height: 24px;
+    background: var(--bg);
+    border-radius: 0 0 16px 16px;
+    z-index: 2;
   }
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
+  .phone-screen {
+    background: var(--bg);
+    border-radius: 24px;
+    padding: 32px 12px 12px;
+    display: flex; flex-direction: column; gap: 8px;
   }
 
-  .widget:nth-child(1) { animation-delay: 0.05s; }
-  .widget:nth-child(2) { animation-delay: 0.1s; }
-  .widget:nth-child(3) { animation-delay: 0.15s; }
-  .widget:nth-child(4) { animation-delay: 0.2s; }
-  .widget:nth-child(5) { animation-delay: 0.25s; }
+  .phone-widget {
+    background: var(--surface2);
+    border-radius: 14px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+  }
 
-  .widget-label {
-    font-size: 0.7rem;
+  .pw-label {
+    font-size: 0.55rem;
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--muted);
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    margin-bottom: 6px;
   }
 
-  .widget-label .dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    display: inline-block;
-  }
-
-  /* --- COUNTDOWN WIDGET --- */
-  .countdown-widget {
-    grid-column: span 7;
-    background: linear-gradient(135deg, #16161a 0%, #1a1a22 100%);
-  }
-
-  .countdown-title-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-
-  .countdown-event-name {
+  .pw-value {
     font-family: 'DM Serif Display', serif;
-    font-size: 1.6rem;
-    font-weight: 400;
-    color: var(--text);
-  }
-
-  .countdown-event-name.placeholder {
-    color: var(--muted);
-    font-style: italic;
-    font-size: 1.1rem;
-  }
-
-  .edit-btn {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--muted);
-    border-radius: 10px;
-    padding: 6px 14px;
-    font-family: 'Syne', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    letter-spacing: 0.04em;
-  }
-
-  .edit-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.18); }
-
-  .countdown-units {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-  }
-
-  .cd-unit {
-    background: var(--surface2);
-    border-radius: 14px;
-    padding: 18px 12px;
-    text-align: center;
-    border: 1px solid var(--border);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .cd-unit::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at top, rgba(232,200,122,0.06) 0%, transparent 70%);
-  }
-
-  .cd-number {
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(2.2rem, 5vw, 3.5rem);
-    line-height: 1;
+    font-size: 1.4rem;
     color: var(--accent1);
-    display: block;
-    font-variant-numeric: tabular-nums;
+    line-height: 1;
   }
 
-  .cd-label {
-    font-size: 0.65rem;
+  .pw-sub { font-size: 0.6rem; color: var(--muted); margin-top: 3px; }
+
+  .pw-glasses { display: flex; gap: 4px; margin-top: 6px; }
+  .pw-glass {
+    width: 14px; height: 18px;
+    border: 1.5px solid rgba(122,184,232,0.3);
+    border-radius: 2px 2px 5px 5px;
+    position: relative; overflow: hidden;
+  }
+  .pw-glass.f::after {
+    content: ''; position: absolute; inset: 0;
+    background: rgba(122,184,232,0.7);
+  }
+
+  .pw-habits { display: flex; flex-direction: column; gap: 5px; }
+  .pw-habit {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 0.65rem; color: var(--muted);
+  }
+  .pw-habit .c {
+    width: 12px; height: 12px; border-radius: 50%;
+    border: 1.5px solid rgba(168,232,122,0.4);
+    flex-shrink: 0;
+  }
+  .pw-habit.done .c { background: var(--accent3); border-color: var(--accent3); }
+  .pw-habit.done span { color: var(--text); }
+
+  /* floating badges on phone */
+  .phone-badge {
+    position: absolute;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 8px 12px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    white-space: nowrap;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .phone-badge:nth-child(2) { animation-delay: 1s; }
+  .phone-badge:nth-child(3) { animation-delay: 2s; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  /* ── FEATURES ── */
+  .section {
+    position: relative; z-index: 1;
+    padding: 80px 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    text-align: center;
+    font-size: 0.72rem;
+    font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--muted);
-    margin-top: 6px;
-    font-weight: 700;
-  }
-
-  .countdown-progress-bar {
-    margin-top: 18px;
-    height: 4px;
-    background: var(--surface2);
-    border-radius: 999px;
-    overflow: hidden;
-  }
-
-  .countdown-progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent1), #f0d090);
-    border-radius: 999px;
-    transition: width 1s ease;
-  }
-
-  .countdown-meta {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 8px;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.72rem;
-    color: var(--muted);
-  }
-
-  /* --- WATER WIDGET --- */
-  .water-widget {
-    grid-column: span 5;
-  }
-
-  .water-goal-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 18px;
-  }
-
-  .water-count-display {
-    font-family: 'DM Serif Display', serif;
-    font-size: 3.5rem;
-    line-height: 1;
-    color: var(--accent2);
-  }
-
-  .water-count-display span {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.9rem;
-    color: var(--muted);
-    vertical-align: middle;
-    margin-left: 4px;
-  }
-
-  .water-glasses {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 18px;
-  }
-
-  .glass {
-    width: 34px; height: 42px;
-    border: 2px solid rgba(122,184,232,0.3);
-    border-radius: 4px 4px 8px 8px;
-    cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    position: relative;
-    overflow: hidden;
-    background: transparent;
-    display: flex;
-    align-items: flex-end;
-  }
-
-  .glass .fill {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    background: linear-gradient(180deg, rgba(122,184,232,0.7), rgba(92,154,202,0.9));
-    transition: height 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    height: 0;
-  }
-
-  .glass.filled {
-    border-color: var(--accent2);
-    transform: scale(1.08);
-    box-shadow: 0 0 12px rgba(122,184,232,0.3);
-  }
-
-  .glass.filled .fill { height: 100%; }
-
-  .glass:hover { transform: scale(1.12) translateY(-2px); }
-
-  .water-btns {
-    display: flex;
-    gap: 10px;
-  }
-
-  .water-btn {
-    flex: 1;
-    padding: 11px;
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    font-family: 'Syne', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
-    letter-spacing: 0.02em;
-  }
-
-  .water-btn-add {
-    background: rgba(122,184,232,0.15);
-    color: var(--accent2);
-    border-color: rgba(122,184,232,0.3);
-  }
-
-  .water-btn-add:hover {
-    background: rgba(122,184,232,0.25);
-    transform: translateY(-1px);
-  }
-
-  .water-btn-remove {
-    background: var(--surface2);
-    color: var(--muted);
-  }
-
-  .water-btn-remove:hover { color: var(--text); }
-
-  .water-ml {
-    margin-top: 12px;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--muted);
-  }
-
-  .water-bar {
-    margin-top: 8px;
-    height: 3px;
-    background: var(--surface2);
-    border-radius: 999px;
-    overflow: hidden;
-  }
-
-  .water-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent2), #90d4f8);
-    border-radius: 999px;
-    transition: width 0.5s ease;
-  }
-
-  /* --- NOTES WIDGET --- */
-  .notes-widget {
-    grid-column: span 6;
-  }
-
-  .notes-tabs {
-    display: flex;
-    gap: 6px;
     margin-bottom: 14px;
   }
 
-  .note-tab {
-    padding: 5px 14px;
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    cursor: pointer;
-    transition: all 0.2s;
-    background: transparent;
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 400;
+    text-align: center;
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+
+  .section-title em { font-style: italic; color: var(--accent1); }
+
+  .section-sub {
+    text-align: center;
     color: var(--muted);
-    font-family: 'Syne', sans-serif;
-  }
-
-  .note-tab.active {
-    background: var(--accent4);
-    color: #1a0a10;
-    border-color: var(--accent4);
-  }
-
-  .notes-area {
-    width: 100%;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 16px;
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    font-size: 0.82rem;
+    font-size: 0.95rem;
+    max-width: 480px;
+    margin: 0 auto 56px;
     line-height: 1.7;
-    resize: none;
-    min-height: 140px;
-    outline: none;
-    transition: border-color 0.2s;
   }
 
-  .notes-area:focus {
-    border-color: rgba(232,122,176,0.4);
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
   }
 
-  .notes-area::placeholder { color: var(--muted); }
-
-  .notes-footer {
-    margin-top: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .char-count {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--muted);
-  }
-
-  .save-indicator {
-    font-size: 0.7rem;
-    color: var(--accent3);
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-
-  .save-indicator.show { opacity: 1; }
-
-  /* --- HABIT WIDGET --- */
-  .habit-widget {
-    grid-column: span 6;
-  }
-
-  .habit-list { display: flex; flex-direction: column; gap: 10px; }
-
-  .habit-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 14px;
-    background: var(--surface2);
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    cursor: pointer;
-    transition: all 0.2s;
-    user-select: none;
-  }
-
-  .habit-item:hover { border-color: rgba(255,255,255,0.14); }
-
-  .habit-check {
-    width: 22px; height: 22px;
-    border-radius: 50%;
-    border: 2px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    flex-shrink: 0;
-    font-size: 0.75rem;
-  }
-
-  .habit-item.done .habit-check {
-    background: var(--accent3);
-    border-color: var(--accent3);
-    color: #0a1a08;
-    transform: scale(1.15);
-  }
-
-  .habit-name {
-    flex: 1;
-    font-size: 0.88rem;
-    font-weight: 600;
-    transition: color 0.2s;
-  }
-
-  .habit-item.done .habit-name {
-    color: var(--muted);
-    text-decoration: line-through;
-  }
-
-  .habit-streak {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.72rem;
-    color: var(--accent1);
-    padding: 2px 8px;
-    background: rgba(232,200,122,0.1);
-    border-radius: 999px;
-  }
-
-  .add-habit-row {
-    display: flex;
-    gap: 8px;
-    margin-top: 12px;
-  }
-
-  .add-habit-input {
-    flex: 1;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 9px 14px;
-    color: var(--text);
-    font-family: 'Syne', sans-serif;
-    font-size: 0.8rem;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-
-  .add-habit-input:focus { border-color: rgba(168,232,122,0.4); }
-  .add-habit-input::placeholder { color: var(--muted); }
-
-  .add-habit-btn {
-    background: rgba(168,232,122,0.15);
-    color: var(--accent3);
-    border: 1px solid rgba(168,232,122,0.3);
-    border-radius: 10px;
-    padding: 9px 16px;
-    font-family: 'Syne', sans-serif;
-    font-size: 0.8rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .add-habit-btn:hover { background: rgba(168,232,122,0.25); }
-
-  /* --- QUOTE WIDGET --- */
-  .quote-widget {
-    grid-column: span 12;
-    background: var(--surface2);
-    text-align: center;
-    padding: 28px 40px;
-  }
-
-  .quote-text {
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-    font-weight: 400;
-    font-style: italic;
-    color: var(--text);
-    line-height: 1.5;
-    max-width: 700px;
-    margin: 0 auto 10px;
-  }
-
-  .quote-author {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--accent4);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
-  .quote-refresh {
-    display: inline-block;
-    margin-top: 14px;
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    border-radius: 999px;
-    padding: 5px 16px;
-    font-family: 'Syne', sans-serif;
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .quote-refresh:hover { color: var(--text); border-color: rgba(255,255,255,0.18); }
-
-  /* --- MODAL --- */
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.7);
-    backdrop-filter: blur(8px);
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.25s;
-  }
-
-  .modal-overlay.open {
-    opacity: 1;
-    pointer-events: all;
-  }
-
-  .modal {
+  .feature-card {
     background: var(--surface);
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid var(--border);
     border-radius: 20px;
-    padding: 32px;
-    width: min(420px, 90vw);
-    transform: translateY(16px) scale(0.97);
-    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    padding: 28px 24px;
+    transition: all 0.25s;
     position: relative;
+    overflow: hidden;
   }
 
-  .modal-overlay.open .modal { transform: none; }
-
-  .modal h2 {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-    font-weight: 400;
+  .feature-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
   }
 
-  .modal-field { margin-bottom: 16px; }
+  .feature-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255,255,255,0.14);
+  }
 
-  .modal-field label {
+  .feature-icon {
+    font-size: 2rem;
+    margin-bottom: 16px;
     display: block;
-    font-size: 0.72rem;
+  }
+
+  .feature-name {
+    font-size: 1rem;
     font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
     margin-bottom: 8px;
-  }
-
-  .modal-field input {
-    width: 100%;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 12px 16px;
     color: var(--text);
-    font-family: 'Syne', sans-serif;
-    font-size: 0.9rem;
-    outline: none;
-    transition: border-color 0.2s;
   }
 
-  .modal-field input:focus { border-color: rgba(232,200,122,0.5); }
-
-  .modal-btns {
-    display: flex;
-    gap: 10px;
-    margin-top: 24px;
-  }
-
-  .modal-save {
-    flex: 1;
-    padding: 13px;
-    border-radius: 12px;
-    background: var(--accent1);
-    color: #1a1400;
-    font-family: 'Syne', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 800;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s;
-    letter-spacing: 0.04em;
-  }
-
-  .modal-save:hover { transform: translateY(-1px); filter: brightness(1.1); }
-
-  .modal-cancel {
-    padding: 13px 20px;
-    border-radius: 12px;
-    background: var(--surface2);
+  .feature-desc {
+    font-size: 0.82rem;
     color: var(--muted);
-    font-family: 'Syne', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 600;
-    border: 1px solid var(--border);
-    cursor: pointer;
-    transition: all 0.2s;
+    line-height: 1.6;
   }
 
-  .modal-cancel:hover { color: var(--text); }
+  /* ── DOWNLOAD SECTION ── */
+  .download-section {
+    position: relative; z-index: 1;
+    padding: 0 24px 100px;
+  }
 
-  /* Completed state */
-  .countdown-done {
+  .download-card {
+    max-width: 900px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #0e1a2e 0%, #0e0e1a 50%, #1a0e1a 100%);
+    border: 1px solid rgba(122,184,232,0.15);
+    border-radius: 28px;
+    padding: 56px 48px;
     text-align: center;
-    padding: 30px 0;
+    position: relative;
+    overflow: hidden;
   }
 
-  .countdown-done .emoji { font-size: 3rem; margin-bottom: 10px; }
-  .countdown-done p {
+  .download-card::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: 50%; transform: translateX(-50%);
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(122,184,232,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .download-card h2 {
     font-family: 'DM Serif Display', serif;
-    font-size: 1.4rem;
-    font-style: italic;
-    color: var(--accent1);
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 400;
+    margin-bottom: 12px;
+    line-height: 1.1;
   }
 
-  @media (max-width: 768px) {
-    .grid { padding: 16px; gap: 12px; }
-    .header { padding: 20px 16px 0; }
-    .countdown-widget, .water-widget,
-    .notes-widget, .habit-widget,
-    .quote-widget { grid-column: span 12; }
-    .countdown-units { grid-template-columns: repeat(4, 1fr); gap: 8px; }
-    .cd-unit { padding: 12px 6px; }
+  .download-card h2 em { font-style: italic; color: var(--accent2); }
+
+  .download-card p {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 36px;
+    max-width: 440px;
+    margin-left: auto; margin-right: auto;
+    line-height: 1.7;
+  }
+
+  .download-options {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+
+  .dl-option {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 24px 28px;
+    min-width: 200px;
+    text-align: center;
+    transition: all 0.25s;
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--text);
+    display: block;
+  }
+
+  .dl-option:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.2); }
+
+  .dl-option.primary {
+    background: var(--accent2);
+    border-color: var(--accent2);
+    color: #0a1a2e;
+  }
+
+  .dl-option.primary:hover { filter: brightness(1.1); box-shadow: 0 8px 32px rgba(122,184,232,0.3); }
+
+  .dl-icon { font-size: 2rem; margin-bottom: 10px; display: block; }
+  .dl-name { font-size: 0.95rem; font-weight: 800; margin-bottom: 4px; }
+  .dl-desc { font-size: 0.72rem; opacity: 0.7; }
+
+  .dl-option.primary .dl-desc { color: #0a1a2e; }
+
+  .apk-note {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    background: var(--surface2);
+    border-radius: 10px;
+    padding: 10px 18px;
+    display: inline-block;
+    border: 1px solid var(--border);
+  }
+
+  /* ── STEPS ── */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 60px;
+  }
+
+  .step {
+    text-align: center;
+    padding: 24px 16px;
+  }
+
+  .step-num {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem;
+    color: var(--accent1);
+    margin: 0 auto 14px;
+  }
+
+  .step-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 6px; }
+  .step-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.6; }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative; z-index: 1;
+    text-align: center;
+    padding: 24px;
+    border-top: 1px solid var(--border);
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  footer a { color: var(--accent2); text-decoration: none; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 600px) {
+    nav { padding: 14px 20px; }
+    .nav-link { display: none; }
+    .hero { padding: 100px 20px 60px; }
+    .download-card { padding: 36px 24px; }
+    .section { padding: 60px 20px; }
   }
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-left">
-    <h1>My <span>Dashboard</span></h1>
+<div class="bg-glow"></div>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-logo">MyWidget</div>
+  <div class="nav-links">
+    <a class="nav-link" href="#features">Features</a>
+    <a class="nav-link" href="#download">Download</a>
+    <a class="nav-cta" href="widget-dashboard.html">Open App →</a>
   </div>
-  <div class="live-clock">
-    <span class="time" id="clock">--:--</span>
-    <span id="date-label">Loading�</span>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-badge"><span class="pulse"></span> Free · No account needed</div>
+
+  <h1>Your <span class="italic">personal</span><br>dashboard <span class="sky">app</span></h1>
+
+  <p class="hero-sub">Countdown timers, water tracker, daily habits, notes and inspiration — all in one beautiful app that works offline.</p>
+
+  <div class="hero-btns">
+    <a class="btn-primary" href="myapp.apk" download id="apk-dl-btn">
+      ⬇ Download APK
+    </a>
+    <a class="btn-secondary" href="widget-dashboard.html">
+      🌐 Open in Browser
+    </a>
+  </div>
+
+  <!-- Phone mockup -->
+  <div class="phone-wrap">
+    <div class="phone">
+      <div class="phone-screen">
+        <!-- Countdown mini widget -->
+        <div class="phone-widget">
+          <div class="pw-label">⏳ Countdown</div>
+          <div class="pw-value" id="hero-cd">--</div>
+          <div class="pw-sub">days until your event</div>
+        </div>
+        <!-- Water mini widget -->
+        <div class="phone-widget">
+          <div class="pw-label">💧 Water today</div>
+          <div class="pw-glasses">
+            <div class="pw-glass f"></div>
+            <div class="pw-glass f"></div>
+            <div class="pw-glass f"></div>
+            <div class="pw-glass f"></div>
+            <div class="pw-glass f"></div>
+            <div class="pw-glass"></div>
+            <div class="pw-glass"></div>
+            <div class="pw-glass"></div>
+          </div>
+          <div class="pw-sub" style="margin-top:5px">5 / 8 glasses · 1250 ml</div>
+        </div>
+        <!-- Habits mini widget -->
+        <div class="phone-widget">
+          <div class="pw-label">✅ Habits</div>
+          <div class="pw-habits">
+            <div class="pw-habit done"><div class="c"></div><span>Morning walk</span></div>
+            <div class="pw-habit done"><div class="c"></div><span>Read 10 pages</span></div>
+            <div class="pw-habit"><div class="c"></div><span>Meditate</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURES ── -->
+<section class="section" id="features">
+  <div class="section-label">What's inside</div>
+  <h2 class="section-title">Everything you need,<br><em>nothing you don't</em></h2>
+  <p class="section-sub">5 powerful widgets that help you stay on track every single day.</p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feature-icon">⏳</span>
+      <div class="feature-name">Countdown Timer</div>
+      <div class="feature-desc">Count down to any event — vacation, birthday, deadline. Live seconds ticking with a progress bar.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">💧</span>
+      <div class="feature-name">Water Tracker</div>
+      <div class="feature-desc">Log glasses of water with one tap. Visual glass icons, ml tracker, daily goal — resets every morning.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📝</span>
+      <div class="feature-name">Notes (3 tabs)</div>
+      <div class="feature-desc">Motivation, To-Do, and Thoughts tabs. Auto-saves as you type. Your words, always there.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">✅</span>
+      <div class="feature-name">Daily Habits</div>
+      <div class="feature-desc">Build streaks, add custom habits, delete what you don't need. Resets daily automatically.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">✨</span>
+      <div class="feature-name">Daily Quotes</div>
+      <div class="feature-desc">12 curated motivational quotes. Tap to cycle. A little push every time you open the app.</div>
+    </div>
+    <div class="feature-card" style="border-color:rgba(168,232,122,0.15); background:linear-gradient(135deg,#12121a,#141a12)">
+      <span class="feature-icon">⚡</span>
+      <div class="feature-name">Works Offline</div>
+      <div class="feature-desc">No internet needed after install. All data saved on your phone. No account, no tracking, ever.</div>
+    </div>
+  </div>
+
+  <!-- Install steps -->
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-title">Download APK</div>
+      <div class="step-desc">Tap the download button and save the APK file to your Android phone.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-title">Allow Install</div>
+      <div class="step-desc">Android will ask to allow installs from unknown sources — tap Allow.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-title">Open & Enjoy</div>
+      <div class="step-desc">Find the app on your home screen and start your first countdown!</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── DOWNLOAD ── -->
+<section class="download-section" id="download">
+  <div class="download-card">
+    <h2>Get the app.<br><em>It's completely free.</em></h2>
+    <p>Download the APK directly to your Android phone, or open the web version instantly in your browser — no sign-up required.</p>
+
+    <div class="download-options">
+      <a class="dl-option primary" href="myapp.apk" download id="apk-dl-btn2">
+        <span class="dl-icon">🤖</span>
+        <div class="dl-name">Android APK</div>
+        <div class="dl-desc">Direct install · Free</div>
+      </a>
+      <a class="dl-option" href="widget-dashboard.html">
+        <span class="dl-icon">🌐</span>
+        <div class="dl-name">Web Browser</div>
+        <div class="dl-desc">Works on any device</div>
+      </a>
+      <div class="dl-option" style="cursor:default" onclick="showIOS()">
+        <span class="dl-icon">🍎</span>
+        <div class="dl-name">iPhone</div>
+        <div class="dl-desc">Add to Home Screen</div>
+      </div>
+    </div>
+
+    <div class="apk-note" id="apk-size-note">⬇ myapp.apk · Android 5.0+</div>
+  </div>
+</section>
+
+<!-- iOS instructions toast -->
+<div id="ios-guide" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:200;align-items:center;justify-content:center">
+  <div style="background:#16161a;border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:32px;max-width:340px;margin:20px;text-align:left">
+    <h3 style="font-family:'DM Serif Display',serif;font-size:1.4rem;font-weight:400;margin-bottom:16px">iPhone Install</h3>
+    <div style="background:#1e1e24;border-radius:12px;padding:16px;font-size:0.84rem;line-height:2;color:#7a7885">
+      1. Open <strong style="color:#f0ede8">Safari</strong> on your iPhone<br>
+      2. Go to this website<br>
+      3. Tap the <strong style="color:#f0ede8">Share icon</strong> (□↑)<br>
+      4. Tap <strong style="color:#f0ede8">"Add to Home Screen"</strong><br>
+      5. Tap <strong style="color:#f0ede8">Add</strong> ✓
+    </div>
+    <button onclick="document.getElementById('ios-guide').style.display='none'" style="margin-top:20px;width:100%;padding:13px;border-radius:12px;background:#7ab8e8;color:#0a1a2e;font-family:'Syne',sans-serif;font-size:0.85rem;font-weight:800;border:none;cursor:pointer">Got it!</button>
   </div>
 </div>
 
-<div class="grid">
-
-  <!-- -- COUNTDOWN -- -->
-  <div class="widget countdown-widget">
-    <div class="widget-label"><span class="dot" style="background:var(--accent1)"></span> Countdown</div>
-    <div class="countdown-title-row">
-      <div class="countdown-event-name" id="event-name-display">Set an event ?</div>
-      <button class="edit-btn" onclick="openModal()">? Edit</button>
-    </div>
-    <div id="cd-done" class="countdown-done" style="display:none">
-      <div class="emoji">??</div>
-      <p id="cd-done-text">The day is here!</p>
-    </div>
-    <div id="cd-units" class="countdown-units">
-      <div class="cd-unit"><span class="cd-number" id="cd-days">--</span><div class="cd-label">Days</div></div>
-      <div class="cd-unit"><span class="cd-number" id="cd-hours">--</span><div class="cd-label">Hours</div></div>
-      <div class="cd-unit"><span class="cd-number" id="cd-mins">--</span><div class="cd-label">Minutes</div></div>
-      <div class="cd-unit"><span class="cd-number" id="cd-secs">--</span><div class="cd-label">Seconds</div></div>
-    </div>
-    <div class="countdown-progress-bar">
-      <div class="countdown-progress-fill" id="cd-progress" style="width:0%"></div>
-    </div>
-    <div class="countdown-meta">
-      <span id="cd-start-label">�</span>
-      <span id="cd-end-label">�</span>
-    </div>
-  </div>
-
-  <!-- -- WATER -- -->
-  <div class="widget water-widget">
-    <div class="widget-label"><span class="dot" style="background:var(--accent2)"></span> Water Intake</div>
-    <div class="water-goal-row">
-      <div class="water-count-display" id="water-display">0<span>/ 8 glasses</span></div>
-    </div>
-    <div class="water-glasses" id="water-glasses"></div>
-    <div class="water-btns">
-      <button class="water-btn water-btn-add" onclick="addWater()">+ Glass</button>
-      <button class="water-btn water-btn-remove" onclick="removeWater()">-</button>
-    </div>
-    <div class="water-ml" id="water-ml">0 ml / 2000 ml</div>
-    <div class="water-bar"><div class="water-bar-fill" id="water-bar" style="width:0%"></div></div>
-  </div>
-
-  <!-- -- NOTES -- -->
-  <div class="widget notes-widget">
-    <div class="widget-label"><span class="dot" style="background:var(--accent4)"></span> Notes</div>
-    <div class="notes-tabs">
-      <button class="note-tab active" onclick="switchTab(this,'motivation')">Motivation</button>
-      <button class="note-tab" onclick="switchTab(this,'todo')">To-Do</button>
-      <button class="note-tab" onclick="switchTab(this,'thoughts')">Thoughts</button>
-    </div>
-    <textarea class="notes-area" id="notes-area" placeholder="Write something..." maxlength="1000"></textarea>
-    <div class="notes-footer">
-      <span class="char-count" id="char-count">0 / 1000</span>
-      <span class="save-indicator" id="save-indicator">? Saved</span>
-    </div>
-  </div>
-
-  <!-- -- HABITS -- -->
-  <div class="widget habit-widget">
-    <div class="widget-label"><span class="dot" style="background:var(--accent3)"></span> Daily Habits</div>
-    <div class="habit-list" id="habit-list"></div>
-    <div class="add-habit-row">
-      <input class="add-habit-input" id="habit-input" type="text" placeholder="Add a habit�" onkeydown="if(event.key==='Enter') addHabit()">
-      <button class="add-habit-btn" onclick="addHabit()">Add</button>
-    </div>
-  </div>
-
-  <!-- -- QUOTE -- -->
-  <div class="widget quote-widget">
-    <div class="widget-label" style="justify-content:center"><span class="dot" style="background:var(--accent4)"></span> Daily Inspiration</div>
-    <p class="quote-text" id="quote-text">"The secret of getting ahead is getting started."</p>
-    <div class="quote-author" id="quote-author">� Mark Twain</div>
-    <button class="quote-refresh" onclick="nextQuote()">? New Quote</button>
-  </div>
-
-</div>
-
-<!-- -- MODAL -- -->
-<div class="modal-overlay" id="modal-overlay">
-  <div class="modal">
-    <h2>Set Countdown Event</h2>
-    <div class="modal-field">
-      <label>Event Name</label>
-      <input type="text" id="modal-event" placeholder="e.g. Vacation, Birthday�">
-    </div>
-    <div class="modal-field">
-      <label>Target Date</label>
-      <input type="date" id="modal-date">
-    </div>
-    <div class="modal-btns">
-      <button class="modal-save" onclick="saveCountdown()">Save Event</button>
-      <button class="modal-cancel" onclick="closeModal()">Cancel</button>
-    </div>
-  </div>
-</div>
+<!-- ── FOOTER ── -->
+<footer>
+  <p>MyWidget · Built with ♥ · <a href="widget-dashboard.html">Open App</a></p>
+</footer>
 
 <script>
-// -- CLOCK --
-function updateClock() {
-  const now = new Date();
-  const t = now.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'});
-  const d = now.toLocaleDateString([], {weekday:'short',month:'short',day:'numeric'});
-  document.getElementById('clock').textContent = t;
-  document.getElementById('date-label').textContent = d;
+// Live countdown on hero phone mockup
+function updateHeroCd() {
+  const diff = new Date('2025-12-31').getTime() - Date.now();
+  const days = Math.max(0, Math.floor(diff / 86400000));
+  document.getElementById('hero-cd').textContent = days;
 }
-updateClock(); setInterval(updateClock, 1000);
+updateHeroCd();
+setInterval(updateHeroCd, 60000);
 
-// -- STORAGE HELPERS --
-const S = {
-  get: k => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
-  set: (k,v) => localStorage.setItem(k, JSON.stringify(v))
-};
-
-// -- COUNTDOWN --
-let cdData = S.get('cd') || { event: '', date: '', startMs: null };
-
-function openModal() {
-  document.getElementById('modal-event').value = cdData.event || '';
-  document.getElementById('modal-date').value = cdData.date || '';
-  document.getElementById('modal-overlay').classList.add('open');
+function showIOS() {
+  document.getElementById('ios-guide').style.display = 'flex';
 }
 
-function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
-
-document.getElementById('modal-overlay').addEventListener('click', e => {
-  if (e.target === document.getElementById('modal-overlay')) closeModal();
-});
-
-function saveCountdown() {
-  const ev = document.getElementById('modal-event').value.trim();
-  const dt = document.getElementById('modal-date').value;
-  if (!ev || !dt) { alert('Please fill in both fields.'); return; }
-  cdData = { event: ev, date: dt, startMs: Date.now() };
-  S.set('cd', cdData);
-  closeModal();
-  renderCountdown();
-}
-
-function pad(n) { return String(n).padStart(2, '0'); }
-
-function renderCountdown() {
-  const el = (id) => document.getElementById(id);
-  if (!cdData.date) {
-    el('event-name-display').textContent = 'Set an event ?';
-    el('event-name-display').classList.add('placeholder');
-    return;
-  }
-  el('event-name-display').textContent = cdData.event;
-  el('event-name-display').classList.remove('placeholder');
-
-  const target = new Date(cdData.date + 'T00:00:00').getTime();
-  const now = Date.now();
-  const diff = target - now;
-
-  if (diff <= 0) {
-    el('cd-units').style.display = 'none';
-    el('cd-done').style.display = 'block';
-    el('cd-done-text').textContent = cdData.event + ' is here! ??';
-    el('cd-progress').style.width = '100%';
-    return;
-  }
-
-  el('cd-units').style.display = 'grid';
-  el('cd-done').style.display = 'none';
-
-  const days  = Math.floor(diff / 86400000);
-  const hours = Math.floor((diff % 86400000) / 3600000);
-  const mins  = Math.floor((diff % 3600000) / 60000);
-  const secs  = Math.floor((diff % 60000) / 1000);
-
-  el('cd-days').textContent = days;
-  el('cd-hours').textContent = pad(hours);
-  el('cd-mins').textContent = pad(mins);
-  el('cd-secs').textContent = pad(secs);
-
-  // Progress bar
-  const startMs = cdData.startMs || (target - 30*86400000);
-  const total = target - startMs;
-  const elapsed = now - startMs;
-  const pct = Math.max(0, Math.min(100, (elapsed/total)*100));
-  el('cd-progress').style.width = pct + '%';
-
-  const startDate = new Date(startMs).toLocaleDateString([], {month:'short',day:'numeric'});
-  const endDate   = new Date(target).toLocaleDateString([], {month:'short',day:'numeric',year:'numeric'});
-  el('cd-start-label').textContent = 'Start: ' + startDate;
-  el('cd-end-label').textContent = endDate;
-}
-
-renderCountdown();
-setInterval(renderCountdown, 1000);
-
-// -- WATER --
-const GOAL = 8;
-const ML_PER = 250;
-let water = S.get('water-day') || { count: 0, date: new Date().toDateString() };
-
-// Reset if new day
-if (water.date !== new Date().toDateString()) {
-  water = { count: 0, date: new Date().toDateString() };
-  S.set('water-day', water);
-}
-
-function renderWater() {
-  const el = document.getElementById('water-glasses');
-  el.innerHTML = '';
-  for (let i = 0; i < GOAL; i++) {
-    const g = document.createElement('div');
-    g.className = 'glass' + (i < water.count ? ' filled' : '');
-    g.innerHTML = '<div class="fill"></div>';
-    g.onclick = () => { water.count = (i < water.count) ? i : i + 1; S.set('water-day', water); renderWater(); };
-    el.appendChild(g);
-  }
-  document.getElementById('water-display').innerHTML = `${water.count}<span>/ ${GOAL} glasses</span>`;
-  const ml = water.count * ML_PER;
-  document.getElementById('water-ml').textContent = `${ml} ml / ${GOAL*ML_PER} ml`;
-  const pct = Math.min(100, (water.count / GOAL) * 100);
-  document.getElementById('water-bar').style.width = pct + '%';
-}
-
-function addWater() {
-  if (water.count < GOAL) { water.count++; S.set('water-day', water); renderWater(); }
-}
-function removeWater() {
-  if (water.count > 0) { water.count--; S.set('water-day', water); renderWater(); }
-}
-
-renderWater();
-
-// -- NOTES --
-let currentTab = 'motivation';
-let saveTimer;
-
-const area = document.getElementById('notes-area');
-const charCount = document.getElementById('char-count');
-const saveInd = document.getElementById('save-indicator');
-
-function loadNote() {
-  const saved = S.get('note-' + currentTab) || '';
-  area.value = saved;
-  charCount.textContent = saved.length + ' / 1000';
-}
-
-function switchTab(btn, tab) {
-  document.querySelectorAll('.note-tab').forEach(t => t.classList.remove('active'));
-  btn.classList.add('active');
-  currentTab = tab;
-  loadNote();
-}
-
-area.addEventListener('input', () => {
-  charCount.textContent = area.value.length + ' / 1000';
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(() => {
-    S.set('note-' + currentTab, area.value);
-    saveInd.classList.add('show');
-    setTimeout(() => saveInd.classList.remove('show'), 1500);
-  }, 600);
-});
-
-loadNote();
-
-// -- HABITS --
-let habits = S.get('habits') || [
-  { name: 'Morning walk', done: false, streak: 3 },
-  { name: 'Read 10 pages', done: false, streak: 7 },
-  { name: 'Meditate', done: false, streak: 1 }
-];
-
-// Reset done each day
-const habitDay = S.get('habit-day');
-const today = new Date().toDateString();
-if (habitDay !== today) {
-  habits.forEach(h => h.done = false);
-  S.set('habit-day', today);
-}
-
-function renderHabits() {
-  const list = document.getElementById('habit-list');
-  list.innerHTML = '';
-  habits.forEach((h, i) => {
-    const el = document.createElement('div');
-    el.className = 'habit-item' + (h.done ? ' done' : '');
-    el.innerHTML = `
-      <div class="habit-check">${h.done ? '?' : ''}</div>
-      <div class="habit-name">${h.name}</div>
-      <div class="habit-streak">?? ${h.streak}d</div>
-    `;
-    el.onclick = () => {
-      h.done = !h.done;
-      if (h.done) h.streak++;
-      S.set('habits', habits);
-      renderHabits();
-    };
-    list.appendChild(el);
-  });
-}
-
-function addHabit() {
-  const inp = document.getElementById('habit-input');
-  const name = inp.value.trim();
-  if (!name) return;
-  habits.push({ name, done: false, streak: 0 });
-  S.set('habits', habits);
-  inp.value = '';
-  renderHabits();
-}
-
-renderHabits();
-
-// -- QUOTES --
-const quotes = [
-  { text: "The secret of getting ahead is getting started.", author: "Mark Twain" },
-  { text: "You don't have to be great to start, but you have to start to be great.", author: "Zig Ziglar" },
-  { text: "Do something today that your future self will thank you for.", author: "Sean Patrick Flanery" },
-  { text: "Small steps in the right direction can turn out to be the biggest step of your life.", author: "Naeem Callaway" },
-  { text: "Discipline is the bridge between goals and accomplishment.", author: "Jim Rohn" },
-  { text: "The only bad workout is the one that didn't happen.", author: "Unknown" },
-  { text: "You are never too old to set another goal or to dream a new dream.", author: "C.S. Lewis" },
-  { text: "Act as if what you do makes a difference. It does.", author: "William James" },
-  { text: "Success is the sum of small efforts repeated day in and day out.", author: "Robert Collier" },
-  { text: "Believe you can and you're halfway there.", author: "Theodore Roosevelt" },
-  { text: "It always seems impossible until it's done.", author: "Nelson Mandela" },
-  { text: "Push yourself, because no one else is going to do it for you.", author: "Unknown" }
-];
-
-let qIndex = S.get('quote-index') || 0;
-
-function renderQuote() {
-  const q = quotes[qIndex % quotes.length];
-  document.getElementById('quote-text').textContent = `"${q.text}"`;
-  document.getElementById('quote-author').textContent = `� ${q.author}`;
-}
-
-function nextQuote() {
-  qIndex = (qIndex + 1) % quotes.length;
-  S.set('quote-index', qIndex);
-  renderQuote();
-}
-
-renderQuote();
+// Check if APK exists — update note text
+// You need to replace "myapp.apk" with your actual APK filename
+const apkName = 'myapp.apk'; // ← CHANGE THIS to your actual APK filename
+document.getElementById('apk-dl-btn').href = apkName;
+document.getElementById('apk-dl-btn2').href = apkName;
 </script>
 </body>
 </html>
