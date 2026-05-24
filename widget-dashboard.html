@@ -1242,7 +1242,19 @@ document.getElementById('install-modal').addEventListener('click', e => {
 });
 
 // Show toast on mobile after 3s if not already installed
-const isStandalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
+const isStandalone = window.navigator.standalone || 
+  window.matchMedia('(display-mode: standalone)').matches;
+
+// Detect if running inside Android WebView (APK)
+const isWebView = /wv/.test(navigator.userAgent) || 
+  /Android.*Version\/[\d.]+.*Chrome\/[\d.]+ Mobile/.test(navigator.userAgent);
+
+if (isWebView || isStandalone) {
+  const b = document.getElementById('apk-banner');
+  if (b) b.style.display = 'none';
+  const t = document.getElementById('install-toast');
+  if (t) t.style.display = 'none';
+}
 if (!isStandalone && /Mobi|Android/i.test(navigator.userAgent)) {
   setTimeout(() => {
     const t = document.getElementById('install-toast');
