@@ -13,10 +13,10 @@
     --border: rgba(255,255,255,0.07);
     --text: #f0ede8;
     --muted: #7a7885;
-    --accent1: #e8c87a; /* gold */
-    --accent2: #7ab8e8; /* sky */
-    --accent3: #a8e87a; /* mint */
-    --accent4: #e87ab0; /* rose */
+    --accent1: #e8c87a;
+    --accent2: #7ab8e8;
+    --accent3: #a8e87a;
+    --accent4: #e87ab0;
     --radius: 20px;
   }
 
@@ -30,77 +30,59 @@
     overflow-x: hidden;
   }
 
-  /* Grain overlay */
   body::before {
     content: '';
-    position: fixed;
-    inset: 0;
+    position: fixed; inset: 0;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0.4;
+    pointer-events: none; z-index: 9999; opacity: 0.4;
   }
 
+  /* HEADER */
   .header {
     padding: 32px 32px 0;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
+    display: flex; align-items: flex-end; justify-content: space-between;
   }
 
   .header-left h1 {
     font-family: 'DM Serif Display', serif;
     font-size: clamp(1.8rem, 4vw, 2.8rem);
-    font-weight: 400;
-    letter-spacing: -0.02em;
-    line-height: 1;
+    font-weight: 400; letter-spacing: -0.02em; line-height: 1;
   }
 
-  .header-left h1 span {
-    font-style: italic;
-    color: var(--accent1);
-  }
+  .header-left h1 span { font-style: italic; color: var(--accent1); }
 
   .live-clock {
     font-family: 'DM Mono', monospace;
-    font-size: 0.85rem;
-    color: var(--muted);
-    letter-spacing: 0.05em;
-    text-align: right;
+    font-size: 0.85rem; color: var(--muted);
+    letter-spacing: 0.05em; text-align: right;
   }
 
   .live-clock .time {
-    font-size: 1.5rem;
-    color: var(--text);
-    font-weight: 500;
-    display: block;
+    font-size: 1.5rem; color: var(--text);
+    font-weight: 500; display: block;
   }
 
-  /* Grid layout */
+  /* GRID */
   .grid {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
-    grid-template-rows: auto;
     gap: 16px;
     padding: 24px 32px 32px;
   }
 
-  /* Widget base */
+  /* WIDGET BASE */
   .widget {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 24px;
-    position: relative;
-    overflow: hidden;
+    position: relative; overflow: hidden;
     animation: fadeUp 0.5s ease both;
   }
 
   .widget::after {
     content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 1px;
+    position: absolute; top: 0; left: 0; right: 0; height: 1px;
     background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
   }
 
@@ -116,607 +98,321 @@
   .widget:nth-child(5) { animation-delay: 0.25s; }
 
   .widget-label {
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    font-size: 0.7rem; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
   }
 
-  .widget-label .dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    display: inline-block;
-  }
+  .widget-label .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
 
-  /* ─── COUNTDOWN WIDGET ─── */
+  /* COUNTDOWN */
   .countdown-widget {
     grid-column: span 7;
     background: linear-gradient(135deg, #16161a 0%, #1a1a22 100%);
   }
 
   .countdown-title-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;
   }
 
   .countdown-event-name {
     font-family: 'DM Serif Display', serif;
-    font-size: 1.6rem;
-    font-weight: 400;
-    color: var(--text);
+    font-size: 1.6rem; font-weight: 400; color: var(--text);
   }
 
-  .countdown-event-name.placeholder {
-    color: var(--muted);
-    font-style: italic;
-    font-size: 1.1rem;
-  }
+  .countdown-event-name.placeholder { color: var(--muted); font-style: italic; font-size: 1.1rem; }
 
   .edit-btn {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--muted);
-    border-radius: 10px;
-    padding: 6px 14px;
-    font-family: 'Syne', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    letter-spacing: 0.04em;
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--muted); border-radius: 10px; padding: 6px 14px;
+    font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; letter-spacing: 0.04em;
   }
-
   .edit-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.18); }
 
   .countdown-units {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
   }
 
   .cd-unit {
-    background: var(--surface2);
-    border-radius: 14px;
-    padding: 18px 12px;
-    text-align: center;
-    border: 1px solid var(--border);
-    position: relative;
-    overflow: hidden;
+    background: var(--surface2); border-radius: 14px;
+    padding: 18px 12px; text-align: center;
+    border: 1px solid var(--border); position: relative; overflow: hidden;
   }
 
   .cd-unit::before {
-    content: '';
-    position: absolute;
-    inset: 0;
+    content: ''; position: absolute; inset: 0;
     background: radial-gradient(ellipse at top, rgba(232,200,122,0.06) 0%, transparent 70%);
   }
 
   .cd-number {
     font-family: 'DM Serif Display', serif;
     font-size: clamp(2.2rem, 5vw, 3.5rem);
-    line-height: 1;
-    color: var(--accent1);
-    display: block;
-    font-variant-numeric: tabular-nums;
+    line-height: 1; color: var(--accent1); display: block;
   }
 
   .cd-label {
-    font-size: 0.65rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-top: 6px;
-    font-weight: 700;
+    font-size: 0.65rem; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--muted);
+    margin-top: 6px; font-weight: 700;
   }
 
   .countdown-progress-bar {
-    margin-top: 18px;
-    height: 4px;
-    background: var(--surface2);
-    border-radius: 999px;
-    overflow: hidden;
+    margin-top: 18px; height: 4px;
+    background: var(--surface2); border-radius: 999px; overflow: hidden;
   }
 
   .countdown-progress-fill {
     height: 100%;
     background: linear-gradient(90deg, var(--accent1), #f0d090);
-    border-radius: 999px;
-    transition: width 1s ease;
+    border-radius: 999px; transition: width 1s ease;
   }
 
   .countdown-meta {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 8px;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.72rem;
-    color: var(--muted);
+    display: flex; justify-content: space-between; margin-top: 8px;
+    font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--muted);
   }
 
-  /* ─── WATER WIDGET ─── */
-  .water-widget {
-    grid-column: span 5;
+  .countdown-done { text-align: center; padding: 30px 0; }
+  .countdown-done .emoji { font-size: 3rem; margin-bottom: 10px; }
+  .countdown-done p {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem; font-style: italic; color: var(--accent1);
   }
 
-  .water-goal-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 18px;
-  }
+  /* WATER */
+  .water-widget { grid-column: span 5; }
+
+  .water-goal-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
 
   .water-count-display {
-    font-family: 'DM Serif Display', serif;
-    font-size: 3.5rem;
-    line-height: 1;
-    color: var(--accent2);
+    font-family: 'DM Serif Display', serif; font-size: 3.5rem; line-height: 1; color: var(--accent2);
   }
 
   .water-count-display span {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.9rem;
-    color: var(--muted);
-    vertical-align: middle;
-    margin-left: 4px;
+    font-family: 'DM Mono', monospace; font-size: 0.9rem;
+    color: var(--muted); vertical-align: middle; margin-left: 4px;
   }
 
-  .water-glasses {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 18px;
-  }
+  .water-glasses { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
 
   .glass {
     width: 34px; height: 42px;
     border: 2px solid rgba(122,184,232,0.3);
     border-radius: 4px 4px 8px 8px;
-    cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    position: relative;
-    overflow: hidden;
-    background: transparent;
-    display: flex;
-    align-items: flex-end;
+    cursor: pointer; transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative; overflow: hidden; background: transparent;
   }
 
   .glass .fill {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
+    position: absolute; bottom: 0; left: 0; right: 0;
     background: linear-gradient(180deg, rgba(122,184,232,0.7), rgba(92,154,202,0.9));
-    transition: height 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    height: 0;
+    transition: height 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); height: 0;
   }
 
-  .glass.filled {
-    border-color: var(--accent2);
-    transform: scale(1.08);
-    box-shadow: 0 0 12px rgba(122,184,232,0.3);
-  }
-
+  .glass.filled { border-color: var(--accent2); transform: scale(1.08); box-shadow: 0 0 12px rgba(122,184,232,0.3); }
   .glass.filled .fill { height: 100%; }
-
   .glass:hover { transform: scale(1.12) translateY(-2px); }
 
-  .water-btns {
-    display: flex;
-    gap: 10px;
-  }
+  .water-btns { display: flex; gap: 10px; }
 
   .water-btn {
-    flex: 1;
-    padding: 11px;
-    border-radius: 12px;
+    flex: 1; padding: 11px; border-radius: 12px;
     border: 1px solid var(--border);
-    font-family: 'Syne', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
-    letter-spacing: 0.02em;
+    font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700;
+    cursor: pointer; transition: all 0.2s; letter-spacing: 0.02em;
   }
 
-  .water-btn-add {
-    background: rgba(122,184,232,0.15);
-    color: var(--accent2);
-    border-color: rgba(122,184,232,0.3);
-  }
-
-  .water-btn-add:hover {
-    background: rgba(122,184,232,0.25);
-    transform: translateY(-1px);
-  }
-
-  .water-btn-remove {
-    background: var(--surface2);
-    color: var(--muted);
-  }
-
+  .water-btn-add { background: rgba(122,184,232,0.15); color: var(--accent2); border-color: rgba(122,184,232,0.3); }
+  .water-btn-add:hover { background: rgba(122,184,232,0.25); transform: translateY(-1px); }
+  .water-btn-remove { background: var(--surface2); color: var(--muted); }
   .water-btn-remove:hover { color: var(--text); }
 
-  .water-ml {
-    margin-top: 12px;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--muted);
-  }
+  .water-ml { margin-top: 12px; font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--muted); }
 
-  .water-bar {
-    margin-top: 8px;
-    height: 3px;
-    background: var(--surface2);
-    border-radius: 999px;
-    overflow: hidden;
-  }
+  .water-bar { margin-top: 8px; height: 3px; background: var(--surface2); border-radius: 999px; overflow: hidden; }
+  .water-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent2), #90d4f8); border-radius: 999px; transition: width 0.5s ease; }
 
-  .water-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent2), #90d4f8);
-    border-radius: 999px;
-    transition: width 0.5s ease;
-  }
+  /* NOTES */
+  .notes-widget { grid-column: span 6; }
 
-  /* ─── NOTES WIDGET ─── */
-  .notes-widget {
-    grid-column: span 6;
-  }
-
-  .notes-tabs {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 14px;
-  }
+  .notes-tabs { display: flex; gap: 6px; margin-bottom: 14px; }
 
   .note-tab {
-    padding: 5px 14px;
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    cursor: pointer;
-    transition: all 0.2s;
-    background: transparent;
-    color: var(--muted);
+    padding: 5px 14px; border-radius: 999px;
+    border: 1px solid var(--border); font-size: 0.72rem;
+    font-weight: 700; letter-spacing: 0.06em; cursor: pointer;
+    transition: all 0.2s; background: transparent; color: var(--muted);
     font-family: 'Syne', sans-serif;
   }
 
-  .note-tab.active {
-    background: var(--accent4);
-    color: #1a0a10;
-    border-color: var(--accent4);
-  }
+  .note-tab.active { background: var(--accent4); color: #1a0a10; border-color: var(--accent4); }
 
   .notes-area {
-    width: 100%;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 16px;
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    font-size: 0.82rem;
-    line-height: 1.7;
-    resize: none;
-    min-height: 140px;
-    outline: none;
-    transition: border-color 0.2s;
+    width: 100%; background: var(--surface2);
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 16px; color: var(--text);
+    font-family: 'DM Mono', monospace; font-size: 0.82rem;
+    line-height: 1.7; resize: none; min-height: 140px;
+    outline: none; transition: border-color 0.2s;
   }
 
-  .notes-area:focus {
-    border-color: rgba(232,122,176,0.4);
-  }
-
+  .notes-area:focus { border-color: rgba(232,122,176,0.4); }
   .notes-area::placeholder { color: var(--muted); }
 
-  .notes-footer {
-    margin-top: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+  .notes-footer { margin-top: 10px; display: flex; justify-content: space-between; align-items: center; }
 
-  .char-count {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--muted);
-  }
+  .char-count { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--muted); }
 
   .save-indicator {
-    font-size: 0.7rem;
-    color: var(--accent3);
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    opacity: 0;
-    transition: opacity 0.3s;
+    font-size: 0.7rem; color: var(--accent3);
+    font-weight: 600; letter-spacing: 0.06em;
+    opacity: 0; transition: opacity 0.3s;
   }
-
   .save-indicator.show { opacity: 1; }
 
-  /* ─── HABIT WIDGET ─── */
-  .habit-widget {
-    grid-column: span 6;
-  }
+  /* HABITS */
+  .habit-widget { grid-column: span 6; }
 
   .habit-list { display: flex; flex-direction: column; gap: 10px; }
 
   .habit-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 14px;
-    background: var(--surface2);
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    cursor: pointer;
-    transition: all 0.2s;
-    user-select: none;
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 14px; background: var(--surface2);
+    border-radius: 12px; border: 1px solid var(--border);
+    cursor: pointer; transition: all 0.2s; user-select: none;
   }
-
   .habit-item:hover { border-color: rgba(255,255,255,0.14); }
 
   .habit-check {
-    width: 22px; height: 22px;
-    border-radius: 50%;
+    width: 22px; height: 22px; border-radius: 50%;
     border: 2px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items: center; justify-content: center;
     transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    flex-shrink: 0;
-    font-size: 0.75rem;
+    flex-shrink: 0; font-size: 0.75rem;
   }
 
-  .habit-item.done .habit-check {
-    background: var(--accent3);
-    border-color: var(--accent3);
-    color: #0a1a08;
-    transform: scale(1.15);
-  }
+  .habit-item.done .habit-check { background: var(--accent3); border-color: var(--accent3); color: #0a1a08; transform: scale(1.15); }
 
-  .habit-name {
-    flex: 1;
-    font-size: 0.88rem;
-    font-weight: 600;
-    transition: color 0.2s;
-  }
-
-  .habit-item.done .habit-name {
-    color: var(--muted);
-    text-decoration: line-through;
-  }
+  .habit-name { flex: 1; font-size: 0.88rem; font-weight: 600; transition: color 0.2s; }
+  .habit-item.done .habit-name { color: var(--muted); text-decoration: line-through; }
 
   .habit-streak {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.72rem;
-    color: var(--accent1);
-    padding: 2px 8px;
-    background: rgba(232,200,122,0.1);
-    border-radius: 999px;
+    font-family: 'DM Mono', monospace; font-size: 0.72rem;
+    color: var(--accent1); padding: 2px 8px;
+    background: rgba(232,200,122,0.1); border-radius: 999px;
   }
 
-  .add-habit-row {
-    display: flex;
-    gap: 8px;
-    margin-top: 12px;
+  .habit-delete {
+    background: none; border: none; color: var(--muted);
+    cursor: pointer; font-size: 1rem; padding: 4px 6px;
+    border-radius: 6px; transition: all 0.2s; line-height: 1; flex-shrink: 0;
   }
+  .habit-delete:hover { color: #e87a7a; background: rgba(232,122,122,0.1); }
+
+  .add-habit-row { display: flex; gap: 8px; margin-top: 12px; }
 
   .add-habit-input {
-    flex: 1;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 9px 14px;
-    color: var(--text);
-    font-family: 'Syne', sans-serif;
-    font-size: 0.8rem;
-    outline: none;
+    flex: 1; background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 9px 14px; color: var(--text);
+    font-family: 'Syne', sans-serif; font-size: 0.8rem; outline: none;
     transition: border-color 0.2s;
   }
-
   .add-habit-input:focus { border-color: rgba(168,232,122,0.4); }
   .add-habit-input::placeholder { color: var(--muted); }
 
   .add-habit-btn {
-    background: rgba(168,232,122,0.15);
-    color: var(--accent3);
-    border: 1px solid rgba(168,232,122,0.3);
-    border-radius: 10px;
-    padding: 9px 16px;
-    font-family: 'Syne', sans-serif;
-    font-size: 0.8rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
+    background: rgba(168,232,122,0.15); color: var(--accent3);
+    border: 1px solid rgba(168,232,122,0.3); border-radius: 10px;
+    padding: 9px 16px; font-family: 'Syne', sans-serif;
+    font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: all 0.2s;
   }
-
   .add-habit-btn:hover { background: rgba(168,232,122,0.25); }
 
-  .habit-delete {
-    background: none;
-    border: none;
-    color: var(--muted);
-    cursor: pointer;
-    font-size: 1rem;
-    padding: 4px 6px;
-    border-radius: 6px;
-    transition: all 0.2s;
-    line-height: 1;
-    flex-shrink: 0;
-  }
-
-  .habit-delete:hover { color: #e87a7a; background: rgba(232,122,122,0.1); }
-
-  /* ─── QUOTE WIDGET ─── */
+  /* QUOTE */
   .quote-widget {
-    grid-column: span 12;
-    background: var(--surface2);
-    text-align: center;
-    padding: 28px 40px;
+    grid-column: span 12; background: var(--surface2);
+    text-align: center; padding: 28px 40px;
   }
 
   .quote-text {
     font-family: 'DM Serif Display', serif;
     font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-    font-weight: 400;
-    font-style: italic;
-    color: var(--text);
-    line-height: 1.5;
-    max-width: 700px;
-    margin: 0 auto 10px;
+    font-weight: 400; font-style: italic; color: var(--text);
+    line-height: 1.5; max-width: 700px; margin: 0 auto 10px;
   }
 
   .quote-author {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--accent4);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    font-family: 'DM Mono', monospace; font-size: 0.75rem;
+    color: var(--accent4); letter-spacing: 0.1em; text-transform: uppercase;
   }
 
   .quote-refresh {
-    display: inline-block;
-    margin-top: 14px;
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    border-radius: 999px;
-    padding: 5px 16px;
-    font-family: 'Syne', sans-serif;
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    cursor: pointer;
-    transition: all 0.2s;
+    display: inline-block; margin-top: 14px;
+    background: transparent; border: 1px solid var(--border);
+    color: var(--muted); border-radius: 999px; padding: 5px 16px;
+    font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 600;
+    letter-spacing: 0.08em; cursor: pointer; transition: all 0.2s;
   }
-
   .quote-refresh:hover { color: var(--text); border-color: rgba(255,255,255,0.18); }
 
-  /* ─── MODAL ─── */
+  /* MODAL */
   .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.7);
-    backdrop-filter: blur(8px);
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.25s;
+    position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(8px); z-index: 100;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.25s;
   }
-
-  .modal-overlay.open {
-    opacity: 1;
-    pointer-events: all;
-  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
 
   .modal {
-    background: var(--surface);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 20px;
-    padding: 32px;
-    width: min(420px, 90vw);
+    background: var(--surface); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px; padding: 32px; width: min(420px, 90vw);
     transform: translateY(16px) scale(0.97);
     transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    position: relative;
   }
-
   .modal-overlay.open .modal { transform: none; }
 
   .modal h2 {
     font-family: 'DM Serif Display', serif;
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-    font-weight: 400;
+    font-size: 1.5rem; margin-bottom: 20px; font-weight: 400;
   }
 
   .modal-field { margin-bottom: 16px; }
 
   .modal-field label {
-    display: block;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 8px;
+    display: block; font-size: 0.72rem; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 8px;
   }
 
   .modal-field input {
-    width: 100%;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 12px 16px;
-    color: var(--text);
-    font-family: 'Syne', sans-serif;
-    font-size: 0.9rem;
-    outline: none;
+    width: 100%; background: var(--surface2);
+    border: 1px solid var(--border); border-radius: 12px;
+    padding: 12px 16px; color: var(--text);
+    font-family: 'Syne', sans-serif; font-size: 0.9rem; outline: none;
     transition: border-color 0.2s;
   }
-
   .modal-field input:focus { border-color: rgba(232,200,122,0.5); }
 
-  .modal-btns {
-    display: flex;
-    gap: 10px;
-    margin-top: 24px;
-  }
+  .modal-btns { display: flex; gap: 10px; margin-top: 24px; }
 
   .modal-save {
-    flex: 1;
-    padding: 13px;
-    border-radius: 12px;
-    background: var(--accent1);
-    color: #1a1400;
-    font-family: 'Syne', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 800;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s;
-    letter-spacing: 0.04em;
+    flex: 1; padding: 13px; border-radius: 12px;
+    background: var(--accent1); color: #1a1400;
+    font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 800;
+    border: none; cursor: pointer; transition: all 0.2s; letter-spacing: 0.04em;
   }
-
   .modal-save:hover { transform: translateY(-1px); filter: brightness(1.1); }
 
   .modal-cancel {
-    padding: 13px 20px;
-    border-radius: 12px;
-    background: var(--surface2);
-    color: var(--muted);
-    font-family: 'Syne', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 600;
-    border: 1px solid var(--border);
-    cursor: pointer;
-    transition: all 0.2s;
+    padding: 13px 20px; border-radius: 12px;
+    background: var(--surface2); color: var(--muted);
+    font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 600;
+    border: 1px solid var(--border); cursor: pointer; transition: all 0.2s;
   }
-
   .modal-cancel:hover { color: var(--text); }
-
-  /* Completed state */
-  .countdown-done {
-    text-align: center;
-    padding: 30px 0;
-  }
-
-  .countdown-done .emoji { font-size: 3rem; margin-bottom: 10px; }
-  .countdown-done p {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.4rem;
-    font-style: italic;
-    color: var(--accent1);
-  }
 
   @media (max-width: 768px) {
     .grid { padding: 16px; gap: 12px; }
@@ -743,11 +439,11 @@
 
 <div class="grid">
 
-  <!-- ── COUNTDOWN ── -->
+  <!-- COUNTDOWN -->
   <div class="widget countdown-widget">
     <div class="widget-label"><span class="dot" style="background:var(--accent1)"></span> Countdown</div>
     <div class="countdown-title-row">
-      <div class="countdown-event-name" id="event-name-display">Set an event →</div>
+      <div class="countdown-event-name placeholder" id="event-name-display">Set an event →</div>
       <button class="edit-btn" onclick="openModal()">✦ Edit</button>
     </div>
     <div id="cd-done" class="countdown-done" style="display:none">
@@ -769,7 +465,7 @@
     </div>
   </div>
 
-  <!-- ── WATER ── -->
+  <!-- WATER -->
   <div class="widget water-widget">
     <div class="widget-label"><span class="dot" style="background:var(--accent2)"></span> Water Intake</div>
     <div class="water-goal-row">
@@ -784,7 +480,7 @@
     <div class="water-bar"><div class="water-bar-fill" id="water-bar" style="width:0%"></div></div>
   </div>
 
-  <!-- ── NOTES ── -->
+  <!-- NOTES -->
   <div class="widget notes-widget">
     <div class="widget-label"><span class="dot" style="background:var(--accent4)"></span> Notes</div>
     <div class="notes-tabs">
@@ -799,7 +495,7 @@
     </div>
   </div>
 
-  <!-- ── HABITS ── -->
+  <!-- HABITS -->
   <div class="widget habit-widget">
     <div class="widget-label"><span class="dot" style="background:var(--accent3)"></span> Daily Habits</div>
     <div class="habit-list" id="habit-list"></div>
@@ -809,17 +505,17 @@
     </div>
   </div>
 
-  <!-- ── QUOTE ── -->
+  <!-- QUOTE -->
   <div class="widget quote-widget">
     <div class="widget-label" style="justify-content:center"><span class="dot" style="background:var(--accent4)"></span> Daily Inspiration</div>
-    <p class="quote-text" id="quote-text">"The secret of getting ahead is getting started."</p>
-    <div class="quote-author" id="quote-author">— Mark Twain</div>
+    <p class="quote-text" id="quote-text"></p>
+    <div class="quote-author" id="quote-author"></div>
     <button class="quote-refresh" onclick="nextQuote()">↻ New Quote</button>
   </div>
 
 </div>
 
-<!-- ── MODAL ── -->
+<!-- COUNTDOWN MODAL -->
 <div class="modal-overlay" id="modal-overlay">
   <div class="modal">
     <h2>Set Countdown Event</h2>
@@ -839,23 +535,21 @@
 </div>
 
 <script>
-// ── CLOCK ──
+// CLOCK
 function updateClock() {
   const now = new Date();
-  const t = now.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'});
-  const d = now.toLocaleDateString([], {weekday:'short',month:'short',day:'numeric'});
-  document.getElementById('clock').textContent = t;
-  document.getElementById('date-label').textContent = d;
+  document.getElementById('clock').textContent = now.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  document.getElementById('date-label').textContent = now.toLocaleDateString([], {weekday:'short',month:'short',day:'numeric'});
 }
 updateClock(); setInterval(updateClock, 1000);
 
-// ── STORAGE HELPERS ──
+// STORAGE
 const S = {
   get: k => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
   set: (k,v) => localStorage.setItem(k, JSON.stringify(v))
 };
 
-// ── COUNTDOWN ──
+// COUNTDOWN
 let cdData = S.get('cd') || { event: '', date: '', startMs: null };
 
 function openModal() {
@@ -883,7 +577,7 @@ function saveCountdown() {
 function pad(n) { return String(n).padStart(2, '0'); }
 
 function renderCountdown() {
-  const el = (id) => document.getElementById(id);
+  const el = id => document.getElementById(id);
   if (!cdData.date) {
     el('event-name-display').textContent = 'Set an event →';
     el('event-name-display').classList.add('placeholder');
@@ -906,43 +600,24 @@ function renderCountdown() {
 
   el('cd-units').style.display = 'grid';
   el('cd-done').style.display = 'none';
+  el('cd-days').textContent = Math.floor(diff / 86400000);
+  el('cd-hours').textContent = pad(Math.floor((diff % 86400000) / 3600000));
+  el('cd-mins').textContent = pad(Math.floor((diff % 3600000) / 60000));
+  el('cd-secs').textContent = pad(Math.floor((diff % 60000) / 1000));
 
-  const days  = Math.floor(diff / 86400000);
-  const hours = Math.floor((diff % 86400000) / 3600000);
-  const mins  = Math.floor((diff % 3600000) / 60000);
-  const secs  = Math.floor((diff % 60000) / 1000);
-
-  el('cd-days').textContent = days;
-  el('cd-hours').textContent = pad(hours);
-  el('cd-mins').textContent = pad(mins);
-  el('cd-secs').textContent = pad(secs);
-
-  // Progress bar
   const startMs = cdData.startMs || (target - 30*86400000);
-  const total = target - startMs;
-  const elapsed = now - startMs;
-  const pct = Math.max(0, Math.min(100, (elapsed/total)*100));
+  const pct = Math.max(0, Math.min(100, ((now - startMs) / (target - startMs)) * 100));
   el('cd-progress').style.width = pct + '%';
-
-  const startDate = new Date(startMs).toLocaleDateString([], {month:'short',day:'numeric'});
-  const endDate   = new Date(target).toLocaleDateString([], {month:'short',day:'numeric',year:'numeric'});
-  el('cd-start-label').textContent = 'Start: ' + startDate;
-  el('cd-end-label').textContent = endDate;
+  el('cd-start-label').textContent = 'Start: ' + new Date(startMs).toLocaleDateString([], {month:'short',day:'numeric'});
+  el('cd-end-label').textContent = new Date(target).toLocaleDateString([], {month:'short',day:'numeric',year:'numeric'});
 }
 
-renderCountdown();
-setInterval(renderCountdown, 1000);
+renderCountdown(); setInterval(renderCountdown, 1000);
 
-// ── WATER ──
-const GOAL = 8;
-const ML_PER = 250;
+// WATER
+const GOAL = 8, ML_PER = 250;
 let water = S.get('water-day') || { count: 0, date: new Date().toDateString() };
-
-// Reset if new day
-if (water.date !== new Date().toDateString()) {
-  water = { count: 0, date: new Date().toDateString() };
-  S.set('water-day', water);
-}
+if (water.date !== new Date().toDateString()) { water = { count: 0, date: new Date().toDateString() }; S.set('water-day', water); }
 
 function renderWater() {
   const el = document.getElementById('water-glasses');
@@ -951,29 +626,20 @@ function renderWater() {
     const g = document.createElement('div');
     g.className = 'glass' + (i < water.count ? ' filled' : '');
     g.innerHTML = '<div class="fill"></div>';
-    g.onclick = () => { water.count = (i < water.count) ? i : i + 1; S.set('water-day', water); renderWater(); };
+    g.onclick = () => { water.count = i < water.count ? i : i + 1; S.set('water-day', water); renderWater(); };
     el.appendChild(g);
   }
   document.getElementById('water-display').innerHTML = `${water.count}<span>/ ${GOAL} glasses</span>`;
-  const ml = water.count * ML_PER;
-  document.getElementById('water-ml').textContent = `${ml} ml / ${GOAL*ML_PER} ml`;
-  const pct = Math.min(100, (water.count / GOAL) * 100);
-  document.getElementById('water-bar').style.width = pct + '%';
+  document.getElementById('water-ml').textContent = `${water.count * ML_PER} ml / ${GOAL * ML_PER} ml`;
+  document.getElementById('water-bar').style.width = Math.min(100, (water.count / GOAL) * 100) + '%';
 }
 
-function addWater() {
-  if (water.count < GOAL) { water.count++; S.set('water-day', water); renderWater(); }
-}
-function removeWater() {
-  if (water.count > 0) { water.count--; S.set('water-day', water); renderWater(); }
-}
-
+function addWater() { if (water.count < GOAL) { water.count++; S.set('water-day', water); renderWater(); } }
+function removeWater() { if (water.count > 0) { water.count--; S.set('water-day', water); renderWater(); } }
 renderWater();
 
-// ── NOTES ──
-let currentTab = 'motivation';
-let saveTimer;
-
+// NOTES
+let currentTab = 'motivation', saveTimer;
 const area = document.getElementById('notes-area');
 const charCount = document.getElementById('char-count');
 const saveInd = document.getElementById('save-indicator');
@@ -1003,20 +669,16 @@ area.addEventListener('input', () => {
 
 loadNote();
 
-// ── HABITS ──
+// HABITS
 let habits = S.get('habits') || [
   { name: 'Morning walk', done: false, streak: 3 },
   { name: 'Read 10 pages', done: false, streak: 7 },
   { name: 'Meditate', done: false, streak: 1 }
 ];
 
-// Reset done each day
 const habitDay = S.get('habit-day');
 const today = new Date().toDateString();
-if (habitDay !== today) {
-  habits.forEach(h => h.done = false);
-  S.set('habit-day', today);
-}
+if (habitDay !== today) { habits.forEach(h => h.done = false); S.set('habit-day', today); }
 
 function renderHabits() {
   const list = document.getElementById('habit-list');
@@ -1028,23 +690,12 @@ function renderHabits() {
       <div class="habit-check">${h.done ? '✓' : ''}</div>
       <div class="habit-name">${h.name}</div>
       <div class="habit-streak">🔥 ${h.streak}d</div>
-      <button class="habit-delete" title="Delete habit">✕</button>
+      <button class="habit-delete" title="Delete">✕</button>
     `;
-    // Toggle done on row click
-    el.onclick = () => {
-      h.done = !h.done;
-      if (h.done) h.streak++;
-      S.set('habits', habits);
-      renderHabits();
-    };
-    // Delete button — stop click from toggling
-    el.querySelector('.habit-delete').onclick = (e) => {
+    el.onclick = () => { h.done = !h.done; if (h.done) h.streak++; S.set('habits', habits); renderHabits(); };
+    el.querySelector('.habit-delete').onclick = e => {
       e.stopPropagation();
-      if (confirm(`Delete "${h.name}"?`)) {
-        habits.splice(i, 1);
-        S.set('habits', habits);
-        renderHabits();
-      }
+      if (confirm(`Delete "${h.name}"?`)) { habits.splice(i, 1); S.set('habits', habits); renderHabits(); }
     };
     list.appendChild(el);
   });
@@ -1062,7 +713,7 @@ function addHabit() {
 
 renderHabits();
 
-// ── QUOTES ──
+// QUOTES
 const quotes = [
   { text: "The secret of getting ahead is getting started.", author: "Mark Twain" },
   { text: "You don't have to be great to start, but you have to start to be great.", author: "Zig Ziglar" },
@@ -1086,14 +737,9 @@ function renderQuote() {
   document.getElementById('quote-author').textContent = `— ${q.author}`;
 }
 
-function nextQuote() {
-  qIndex = (qIndex + 1) % quotes.length;
-  S.set('quote-index', qIndex);
-  renderQuote();
-}
+function nextQuote() { qIndex = (qIndex + 1) % quotes.length; S.set('quote-index', qIndex); renderQuote(); }
 
 renderQuote();
-
 </script>
 </body>
 </html>
