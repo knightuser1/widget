@@ -31,39 +31,40 @@ body.free::before {
 
 /* FREE HEADER */
 .free-header {
-  padding: 20px 28px 0;
+  padding: 14px 20px 0;
   display: flex; align-items: center; justify-content: space-between;
-  gap: 12px;
+  gap: 10px; overflow: hidden;
 }
 .free-header h1 {
   font-family: 'DM Serif Display', serif;
-  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-size: clamp(1.3rem, 3vw, 2rem);
   font-weight: 400; letter-spacing: -0.02em; line-height: 1;
+  white-space: nowrap; flex-shrink: 0;
 }
 .free-header h1 span { font-style: italic; color: #e8c87a; }
-.free-clock { font-family: 'DM Mono', monospace; font-size: 0.82rem; color: #7a7885; letter-spacing: 0.05em; text-align: right; }
-.free-clock .ftime { font-size: 1.4rem; color: #f0ede8; font-weight: 500; display: block; }
+.free-clock { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: #7a7885; letter-spacing: 0.04em; text-align: right; flex-shrink: 0; }
+.free-clock .ftime { font-size: clamp(0.95rem, 2.5vw, 1.2rem); color: #f0ede8; font-weight: 500; display: block; white-space: nowrap; }
 
 /* PREMIUM BTN */
 .premium-btn {
   background: linear-gradient(135deg, #1a1400, #2a2000);
   border: 1px solid rgba(255,215,0,0.4);
-  border-radius: 999px; padding: 7px 16px;
-  font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 800;
+  border-radius: 999px; padding: 5px 12px;
+  font-family: 'Syne', sans-serif; font-size: 0.65rem; font-weight: 800;
   color: #ffd700; cursor: pointer; transition: all 0.3s;
-  letter-spacing: 0.06em; display: flex; align-items: center; gap: 6px;
-  box-shadow: 0 0 16px rgba(255,215,0,0.15);
+  letter-spacing: 0.05em; display: flex; align-items: center; gap: 5px;
+  box-shadow: 0 0 12px rgba(255,215,0,0.15);
   animation: premPulse 3s ease-in-out infinite;
-  flex-shrink: 0;
+  flex-shrink: 0; white-space: nowrap;
 }
 .premium-btn:hover {
-  box-shadow: 0 0 28px rgba(255,215,0,0.4);
+  box-shadow: 0 0 24px rgba(255,215,0,0.4);
   border-color: rgba(255,215,0,0.7);
   transform: translateY(-1px);
 }
 @keyframes premPulse {
-  0%,100% { box-shadow: 0 0 16px rgba(255,215,0,0.15); }
-  50% { box-shadow: 0 0 28px rgba(255,215,0,0.35); }
+  0%,100% { box-shadow: 0 0 12px rgba(255,215,0,0.15); }
+  50% { box-shadow: 0 0 24px rgba(255,215,0,0.35); }
 }
 
 /* FREE GRID */
@@ -338,14 +339,14 @@ body.premium {
 @keyframes pglow{0%,100%{opacity:0.6;transform:scale(1)}50%{opacity:1;transform:scale(1.1)}}
 
 /* PREMIUM HEADER */
-.p-header { position:relative;z-index:10;padding:18px 28px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,140,0,0.12); }
-.p-header-left { display:flex;align-items:center;gap:14px; }
-.p-badge { background:linear-gradient(135deg,#3a7fff,#ff8c00);border-radius:7px;padding:4px 12px;font-family:'Orbitron',monospace;font-size:0.6rem;font-weight:700;letter-spacing:0.2em;color:#fff;box-shadow:0 0 18px rgba(255,140,0,0.35);animation:pbadge 2.5s ease-in-out infinite; }
+.p-header { position:relative;z-index:10;padding:14px 20px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,140,0,0.12);gap:10px;overflow:hidden; }
+.p-header-left { display:flex;align-items:center;gap:10px;flex:1;min-width:0;overflow:hidden; }
+.p-badge { background:linear-gradient(135deg,#3a7fff,#ff8c00);border-radius:7px;padding:4px 10px;font-family:'Orbitron',monospace;font-size:0.55rem;font-weight:700;letter-spacing:0.15em;color:#fff;box-shadow:0 0 18px rgba(255,140,0,0.35);animation:pbadge 2.5s ease-in-out infinite;white-space:nowrap;flex-shrink:0; }
 @keyframes pbadge{0%,100%{box-shadow:0 0 18px rgba(255,140,0,0.35)}50%{box-shadow:0 0 32px rgba(255,140,0,0.65),0 0 60px rgba(58,127,255,0.2)}}
-.p-title { font-family:'Orbitron',monospace;font-size:clamp(0.9rem,2.5vw,1.3rem);font-weight:900;letter-spacing:0.1em;background:linear-gradient(135deg,#6aa0ff,#ffb347);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
-.p-clock { text-align:right;font-family:'Orbitron',monospace; }
-.p-time { font-size:clamp(1.1rem,3vw,1.7rem);font-weight:700;color:#ffb347;display:block;text-shadow:0 0 18px rgba(255,179,71,0.5);letter-spacing:0.05em; }
-.p-date { font-size:0.6rem;color:#6a5a7a;letter-spacing:0.1em;text-transform:uppercase; }
+.p-title { font-family:'Orbitron',monospace;font-size:clamp(0.7rem,2vw,1rem);font-weight:900;letter-spacing:0.08em;background:linear-gradient(135deg,#6aa0ff,#ffb347);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+.p-clock { text-align:right;font-family:'Orbitron',monospace;flex-shrink:0; }
+.p-time { font-size:clamp(0.9rem,2.5vw,1.3rem);font-weight:700;color:#ffb347;display:block;text-shadow:0 0 18px rgba(255,179,71,0.5);letter-spacing:0.04em;white-space:nowrap; }
+.p-date { font-size:0.55rem;color:#6a5a7a;letter-spacing:0.08em;text-transform:uppercase;white-space:nowrap; }
 
 /* RANK BAR */
 .p-rank { position:relative;z-index:10;margin:14px 28px;background:#0c080f;border:1px solid rgba(255,140,0,0.12);border-radius:12px;padding:12px 20px;display:flex;align-items:center;gap:18px;flex-wrap:wrap; }
@@ -667,12 +668,15 @@ body.premium {
     <div class="p-header-left">
       <div class="p-badge">SYSTEM</div>
       <div class="p-title">HUNTER DASHBOARD</div>
-      <div style="background:linear-gradient(135deg,#1a1400,#2a2000);border:1px solid rgba(255,215,0,0.5);border-radius:999px;padding:5px 14px;font-family:'Orbitron',monospace;font-size:0.58rem;font-weight:700;color:#ffd700;letter-spacing:0.1em;box-shadow:0 0 14px rgba(255,215,0,0.2)">👑 PREMIUM ✓</div>
     </div>
     <div class="p-clock">
       <span class="p-time" id="p-clock">00:00:00</span>
       <span class="p-date" id="p-date">—</span>
     </div>
+  </div>
+  <!-- Floating premium badge below header, doesn't block anything -->
+  <div style="position:relative;z-index:10;padding:8px 20px 0;display:flex;justify-content:flex-end;">
+    <div style="background:linear-gradient(135deg,#1a1400,#2a2000);border:1px solid rgba(255,215,0,0.45);border-radius:999px;padding:5px 14px;font-family:'Orbitron',monospace;font-size:0.56rem;font-weight:700;color:#ffd700;letter-spacing:0.1em;box-shadow:0 0 14px rgba(255,215,0,0.2);display:inline-flex;align-items:center;gap:5px;animation:premPulse 3s ease-in-out infinite">👑 PREMIUM UNLOCKED</div>
   </div>
 
   <div class="p-rank">
