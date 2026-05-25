@@ -31,8 +31,9 @@ body.free::before {
 
 /* FREE HEADER */
 .free-header {
-  padding: 28px 28px 0;
-  display: flex; align-items: flex-end; justify-content: space-between;
+  padding: 20px 28px 0;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px;
 }
 .free-header h1 {
   font-family: 'DM Serif Display', serif;
@@ -45,15 +46,15 @@ body.free::before {
 
 /* PREMIUM BTN */
 .premium-btn {
-  position: fixed; top: 16px; right: 16px; z-index: 1000;
   background: linear-gradient(135deg, #1a1400, #2a2000);
   border: 1px solid rgba(255,215,0,0.4);
-  border-radius: 999px; padding: 8px 16px;
+  border-radius: 999px; padding: 7px 16px;
   font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 800;
   color: #ffd700; cursor: pointer; transition: all 0.3s;
   letter-spacing: 0.06em; display: flex; align-items: center; gap: 6px;
   box-shadow: 0 0 16px rgba(255,215,0,0.15);
   animation: premPulse 3s ease-in-out infinite;
+  flex-shrink: 0;
 }
 .premium-btn:hover {
   box-shadow: 0 0 28px rgba(255,215,0,0.4);
@@ -527,17 +528,12 @@ body.premium {
 </head>
 <body class="free">
 
-<!-- PREMIUM BUTTON (always visible) -->
-<button class="premium-btn" id="premium-btn" onclick="openUnlock()">👑 PREMIUM</button>
-
-<!-- ============================================================
-     FREE DASHBOARD
-============================================================ -->
 <div id="free-dashboard">
   <div class="free-header">
     <div>
       <h1>My <span>Dashboard</span></h1>
     </div>
+    <button class="premium-btn" id="premium-btn" onclick="openUnlock()">👑 PREMIUM</button>
     <div class="free-clock">
       <span class="ftime" id="f-clock">--:--</span>
       <span id="f-date">Loading…</span>
@@ -671,6 +667,7 @@ body.premium {
     <div class="p-header-left">
       <div class="p-badge">SYSTEM</div>
       <div class="p-title">HUNTER DASHBOARD</div>
+      <div style="background:linear-gradient(135deg,#1a1400,#2a2000);border:1px solid rgba(255,215,0,0.5);border-radius:999px;padding:5px 14px;font-family:'Orbitron',monospace;font-size:0.58rem;font-weight:700;color:#ffd700;letter-spacing:0.1em;box-shadow:0 0 14px rgba(255,215,0,0.2)">👑 PREMIUM ✓</div>
     </div>
     <div class="p-clock">
       <span class="p-time" id="p-clock">00:00:00</span>
@@ -837,10 +834,6 @@ function checkPremium(){
     document.body.className='premium';
     document.getElementById('free-dashboard').style.display='none';
     document.getElementById('premium-dashboard').style.display='block';
-    document.getElementById('premium-btn').innerHTML='👑 PREMIUM ✓';
-    document.getElementById('premium-btn').style.background='linear-gradient(135deg,#1a1400,#2a1800)';
-    document.getElementById('premium-btn').style.cursor='default';
-    document.getElementById('premium-btn').onclick=null;
     initPremium();
   } else {
     initFree();
@@ -905,13 +898,9 @@ function showAriseAnimation(){
 
   setTimeout(()=>{
     ov.classList.remove('show');
-    // Switch to premium
     document.body.className='premium';
     document.getElementById('free-dashboard').style.display='none';
     document.getElementById('premium-dashboard').style.display='block';
-    document.getElementById('premium-btn').innerHTML='👑 PREMIUM ✓';
-    document.getElementById('premium-btn').style.background='linear-gradient(135deg,#1a1400,#2a1800)';
-    document.getElementById('premium-btn').onclick=null;
     initPremium();
     spawnPremiumParticles();
   }, 3500);
@@ -942,16 +931,51 @@ const QUOTES=[
   {t:"Discipline is the bridge between goals and accomplishment.",a:"Jim Rohn"},
   {t:"Believe you can and you're halfway there.",a:"Theodore Roosevelt"},
   {t:"It always seems impossible until it's done.",a:"Nelson Mandela"},
+  {t:"Success is the sum of small efforts repeated day in and day out.",a:"Robert Collier"},
+  {t:"Push yourself, because no one else is going to do it for you.",a:"Unknown"},
+  {t:"You don't have to be great to start, but you have to start to be great.",a:"Zig Ziglar"},
+  {t:"Small steps in the right direction can turn out to be the biggest step of your life.",a:"Naeem Callaway"},
+  {t:"The harder you work for something, the greater you'll feel when you achieve it.",a:"Unknown"},
+  {t:"Wake up with determination. Go to bed with satisfaction.",a:"Unknown"},
+  {t:"Don't stop when you're tired. Stop when you're done.",a:"Unknown"},
 ];
 const AQUOTES=[
+  // Solo Leveling
   {t:"I alone am the honored one.",a:"Sung Jin-Woo · Solo Leveling"},
-  {t:"Power comes in response to a need, not a desire.",a:"Goku · Dragon Ball Z"},
   {t:"Arise.",a:"Shadow Monarch · Solo Leveling"},
-  {t:"A true warrior lets his actions speak instead of his mouth.",a:"Vegeta · Dragon Ball Z"},
   {t:"I didn't come this far only to come this far.",a:"Solo Leveling — System"},
-  {t:"Push past your limits. That is how legends are born.",a:"S-Rank Hunter"},
-  {t:"Every time I fall, I come back stronger.",a:"Son Goku"},
-  {t:"All I needed was the power to protect what mattered to me.",a:"Sung Jin-Woo"},
+  {t:"All I needed was the power to protect what mattered to me.",a:"Sung Jin-Woo · Solo Leveling"},
+  {t:"The weak have no rights or freedoms. The day you lost, your future was lost with it.",a:"System Notice · Solo Leveling"},
+  // Dragon Ball Z
+  {t:"Power comes in response to a need, not a desire. You have to create that need.",a:"Goku · Dragon Ball Z"},
+  {t:"A true warrior lets his actions speak instead of his mouth.",a:"Vegeta · Dragon Ball Z"},
+  {t:"Every time I fall, I come back stronger. That's just who I am.",a:"Son Goku · DBZ"},
+  {t:"There's no such thing as fair or unfair in battle. There is only victory or defeat.",a:"Vegeta · Dragon Ball Z"},
+  {t:"Push past your limits. That is how legends are born.",a:"Goku · DBZ"},
+  // Naruto
+  {t:"Hard work is worthless for those that don't believe in themselves.",a:"Naruto Uzumaki · Naruto"},
+  {t:"If you don't like your destiny, don't accept it. Have the courage to change it.",a:"Naruto Uzumaki · Naruto"},
+  {t:"A person grows up when he's able to overcome hardship.",a:"Pain · Naruto"},
+  {t:"When people get hurt, they learn to hate. When people hurt others, they become hated.",a:"Nagato · Naruto"},
+  // Attack on Titan
+  {t:"If you win, you live. If you lose, you die. If you don't fight, you can't win.",a:"Eren Yeager · Attack on Titan"},
+  {t:"The world is cruel, but also very beautiful.",a:"Mikasa Ackerman · Attack on Titan"},
+  {t:"I want to see and understand the world outside. I don't want to die inside these walls.",a:"Eren Yeager · AoT"},
+  // One Piece
+  {t:"People's dreams never end.",a:"Whitebeard · One Piece"},
+  {t:"Surpass your limits. Right here, right now.",a:"Monkey D. Luffy · One Piece"},
+  {t:"Only those who have suffered long can see the light within the shadows.",a:"Robin · One Piece"},
+  {t:"Wealth, fame, power — the man who had acquired everything in this world, the Pirate King.",a:"One Piece"},
+  // Demon Slayer
+  {t:"No matter how many people you may lose, you have no choice but to go on living.",a:"Tanjiro · Demon Slayer"},
+  {t:"Turn your scars into your strength.",a:"Demon Slayer"},
+  // Hunter x Hunter
+  {t:"If you want to get to know someone, find out what makes them angry.",a:"Gon · Hunter x Hunter"},
+  {t:"You should enjoy the little detours to the fullest. Because that's where you'll find the things more important than what you want.",a:"Ging · HxH"},
+  // Motivational
+  {t:"No matter the darkness, the hunter walks forward.",a:"Hunter's Creed"},
+  {t:"Discipline is doing what you hate to do, but doing it like you love it.",a:"Mike Tyson"},
+  {t:"The difference between who you are and who you want to be is what you do.",a:"Unknown"},
 ];
 
 // ══════════════════════════════════════════
